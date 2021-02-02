@@ -23,7 +23,7 @@ def processData( labels, matrix ):
 def createChordData( labels ):
   
   placeHolder = [ 0 for i in range( len( labels ) ) ]
-  chordData = [ placeHolder for i in range( len( labels ) ) ]
+  chordData = [ list( placeHolder ) for i in range( len( labels ) ) ]
 
   return chordData
     
@@ -88,9 +88,12 @@ def writeChordData( labelJsonFileName, matrixFileName, outputFileName ):
     rankS = getRank( positionKey, labels, s )
     rankD = getRank( positionKey, labels, d )
 
+    print ( rankS, rankD, q)
+
+
     if rankS > 0 and rankD > 0:
-      chordData[ rankS ][ rankD ] = q 
-      chordData[ rankD ][ rankS ] = q 
+      chordData[ rankS ][ rankD ] += q 
+      chordData[ rankD ][ rankS ] += q 
  
 
   data = {
