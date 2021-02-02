@@ -14,27 +14,27 @@
 
 chordChart = {
 
-  const chordData = chordMatrix
-  const opacityDefault = 0.8
-  const width = 640
-  const height = Math.min(640, width)
+  // const chordData = chordMatrix
+  // const opacityDefault = 0.8
+  // const width = 640
+  // const height = Math.min(640, width)
 
-  const outerRadius = Math.min(width, height) * 0.5 - 50
-  const innerRadius = outerRadius - 20
+  // const outerRadius = Math.min(width, height) * 0.5 - 50
+  // const innerRadius = outerRadius - 20
 
   const color = d3.scaleOrdinal()
     .domain(sharks)
     .range(['#edf8b1','#c7e9b4','#7fcdbb','#41b6c4','#1d91c0','#225ea8','#0c2c84'].reverse())
     // .range(['#ece2f0','#d0d1e6','#a6bddb','#67a9cf','#3690c0','#02818a','#016450'])
 
-  const ribbon = d3.ribbon()
-                   .radius(innerRadius - 4)
-  const arc = d3.arc()
-                .innerRadius(innerRadius)
-                .outerRadius(outerRadius)
-  const chord = d3.chord()
-                  .padAngle(0.05)
-                  .sortSubgroups(d3.descending)
+  // const ribbon = d3.ribbon()
+  //                  .radius(innerRadius - 4)
+  // const arc = d3.arc()
+  //               .innerRadius(innerRadius)
+  //               .outerRadius(outerRadius)
+  // const chord = d3.chord()
+  //                 .padAngle(0.05)
+  //                 .sortSubgroups(d3.descending)
   
   function groupTicks(d, step) {
     const k = (d.endAngle - d.startAngle) / d.value;
@@ -43,13 +43,13 @@ chordChart = {
     });
   }
 
-  const formatValue = d => d
-  const svg = d3.create("svg")
-      .attr('width', width)
-      .attr('height', height)
-      .attr("viewBox", [-width / 2, -height / 2, width, height])
-      .attr("font-size", 10)
-      .attr("font-family", "sans-serif");
+  // const formatValue = d => d
+  // const svg = d3.create("svg")
+  //     .attr('width', width)
+  //     .attr('height', height)
+  //     .attr("viewBox", [-width / 2, -height / 2, width, height])
+  //     .attr("font-size", 10)
+  //     .attr("font-family", "sans-serif");
 
   const chords = chord(chordData);
   
