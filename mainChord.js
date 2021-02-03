@@ -36,26 +36,30 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
 
   var chords = chord( chordDataModified );
   
-
-  console.log( chordDataModified )
-
-  const group = svg.append("g")
-                   .selectAll("g")
+  const group = svg.selectAll("g")
                    .data(chords.groups)
-                   .join("g")
-                   .attr('class', 'group')
+                   .enter().append("g");
 
-  group.append("path")
-       .attr("d", arc)
+  const arcLabel = group.append("path")
+                        .attr("class", "arcLabel")
+                        .attr("d", arc)
+                        .attr("id", (d,i) => "arcLabel_" + i ) 
 
-  svg.append("g")
-     .attr("fill-opacity", 0.67)
-      .selectAll("path")
-      .data(chords)
-      .join( 
-        function(enter) { 
-          return enter.append("path") } )
-        .attr('class', 'chord')
-        .attr("d", ribbon)
+  group.append("text")
+  .attr("x", 8)
+  .attr("dy", 15)
+  .append("textPath")
+    .attr("xlink:href", (d,i) =>  "#arcLabel_" + i )
+    .text(function(chords, i){return "Bon";})
+    .style("fill", "white"); 
+
+  const ribbons = svg.append("g")
+      .attr("fill-opacity", 0.67)
+    .selectAll("path")
+    .data(chords)
+    .enter().append("path")
+      .attr("class", "ribbons")
+      .attr("d", ribbon)
+ 
 
 })
