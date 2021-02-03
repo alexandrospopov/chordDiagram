@@ -116,13 +116,24 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
                             .attr( 'class','checkBoxDiv_label' )
                             .html( d => "   " + d)
 
-  var brushRect = d3.select("#brushSvg")
+  const widthBrush = 3 * width / 4 - 30 ;
+  const heightBrush = 150;
+  
+  var brushSvg = d3.select("#brushSvg")
+                   .attr( "width", widthBrush )
+                   .attr( "height", heightBrush  )
+                   .attr("transform", "translate(" + 30 + "," + 0 + ")")
 
+  var brushRect = brushSvg.append("rect")
+                          .attr( "width", widthBrush )
+                          .attr( "height", heightBrush )
+                          .attr("fill", "#35978f" )
+ 
   var brush = d3.brushX() 
-                .extent([[0,0], [width,height]])
+                .extent([[0,0], [ widthBrush , heightBrush  ]])
                 .on("brush", brushed);
 
-  var brushg = brushRect.append("g")
+  var brushg = brushSvg.append("g")
                   .attr("class", "brush")
                   .call( brush ) 
 
