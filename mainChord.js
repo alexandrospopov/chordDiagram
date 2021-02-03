@@ -51,11 +51,14 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
 
   group.append("text")
   .attr("x", 2)
+  .attr("y", -20)
   .attr("dy", 15)
   .append("textPath")
     .attr("xlink:href", (d,i) =>  "#arcLabel_" + i )
     .text(function(chords, i){return labelData[i];})
-    .style("fill", "white"); 
+    .style("fill", "darkblue")
+    .style('font-weight', 'bold');
+
 
   const ribbons = svg.append("g")
       .attr("fill-opacity", 0.67)
@@ -64,6 +67,30 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
     .enter().append("path")
       .attr("class", "ribbons")
       .attr("d", ribbon)
+      .style("fill", function(d){ return "url(#" + getGradID(d) + ")"; })
+      
+  function getGradID(d){ return "linkGrad-" + d.source.index + "-" + d.target.index; }
+
+  //Create the gradients definitions for each chord
+  const grads = svg.append("defs").selectAll("linearGradient")
+    .data(chords)
+    .enter().append("linearGradient")
+    .attr("id", getGradID)
+    .attr("gradientUnits", "userSpaceOnUse")
+    .attr("x1", function(d,i) { return innerRadius * Math.cos((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2); })
+    .attr("y1", function(d,i) { return innerRadius * Math.sin((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2); })
+    .attr("x2", function(d,i) { return innerRadius * Math.cos((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2); })
+    .attr("y2", function(d,i) { return innerRadius * Math.sin((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2); })
+
+  //Set the starting color (at 0%)
+  grads.append("stop")
+    .attr("offset", "0%")
+    .attr("stop-color", function(d){ return color( d.source.index ); });
+
+  //Set the ending color (at 100%)
+  grads.append("stop")
+    .attr("offset", "100%")
+    .attr("stop-color", function(d){ return color( d.target.index ); });
  
 
 })
