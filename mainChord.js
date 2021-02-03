@@ -29,6 +29,9 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
   labelData = file[0].labelData
   console.log( chordData, labelData )
 
+  color = d3.scaleOrdinal( d3.schemeCategory10 )
+   
+
   chordDataModified = chordData
   for (let i = 0; i < chordData.length; i++) {
       chordDataModified[ i ][ i ] = 0
@@ -44,13 +47,15 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
                         .attr("class", "arcLabel")
                         .attr("d", arc)
                         .attr("id", (d,i) => "arcLabel_" + i ) 
+                        .attr("fill", d => color(d.index))
+                        .attr("stroke", d => d3.rgb(color(d.index)).darker())
 
   group.append("text")
-  .attr("x", 8)
+  .attr("x", 2)
   .attr("dy", 15)
   .append("textPath")
     .attr("xlink:href", (d,i) =>  "#arcLabel_" + i )
-    .text(function(chords, i){return "Bon";})
+    .text(function(chords, i){console.log(labelData);return labelData[i];})
     .style("fill", "white"); 
 
   const ribbons = svg.append("g")
