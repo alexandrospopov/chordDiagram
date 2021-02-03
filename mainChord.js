@@ -1,7 +1,10 @@
 
+const divWidth = document.getElementById("divChord").offsetWidth
+const divHeight = document.getElementById("divChord").offsetHeight
+
 const opacityDefault = 0.8
-const width = 640
-const height = Math.min(640, width)
+const width = divWidth
+const height = divWidth
 
 const outerRadius = Math.min(width, height) * 0.5 - 50
 const innerRadius = outerRadius - 20
