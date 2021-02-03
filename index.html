@@ -7,11 +7,37 @@
     <title> Fiber chord diagram </title>
     <link rel="icon" href="Logo-Ginkgo-Project.png" >
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
   </head>
 
   <body> 
-    <div style="display:inline-block">
-      <svg id="mainChord" width="800" height="800"  style="display:block"></svg>
+
+    <div>
+      <div class="row" id="mainRow" >
+        <div class="col-lg-4" id="googleMap" >
+          <svg id="mainChord" width="800" height="800"  style="display:block"></svg>
+        </div>
+        <div class="col-lg-4" id="informationPanel" > 
+          <br>
+          <h1> Réglages</h1>  
+          <br>
+          <div id="iconChoice">
+            <h2> Choix des aires </h2>
+          </div>
+          <div id="armyChoice">
+            <br>
+            <h2> Option de visualisation </h2>
+            <p> Slider taille qte des fibres </p>
+            <p> Lineaire - Log - Relatif </p>
+            <p> Enlever la diagonale </p>
+          </div>
+        </div>
+      </div>
+    
+    </div>
+
+      
     </div>
     
     <script src="mainChord.js"></script>
