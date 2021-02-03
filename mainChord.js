@@ -91,6 +91,26 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
   grads.append("stop")
     .attr("offset", "100%")
     .attr("stop-color", function(d){ return color( d.target.index ); });
- 
+
+  var divAreaChoice = d3.select('#areaChoice')
+
+  var divAreaChoiceCheckBox = divAreaChoice.selectAll('.checkBoxDiv')
+                              .data( labelData ) 
+
+  var divAreaChoiceCheckBoxEnter = divAreaChoiceCheckBox.enter()
+                                                        .append('div')
+
+  divAreaChoiceCheckBoxEnter.append('input')
+                            .attr('class','checkBoxDiv_cb')
+                            .attr('type','checkbox')
+                            .attr('id', d => 'cb_'+ d )
+                            .attr('name', d=>  d )
+                            .attr('value', d=> d )
+                            .attr('checked', "checked" )
+
+  divAreaChoiceCheckBoxEnter.append('label')
+                            .attr( 'class','checkBoxDiv_label' )
+                            .html( d => "   " + d)
+
 
 })

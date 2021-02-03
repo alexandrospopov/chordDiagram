@@ -33,12 +33,10 @@ def createPositionKey( labels ):
   orderedKeys.sort()
 
   positionKey = {}
-  positionKeyInv = {}
   for iKey, key in enumerate( orderedKeys ):
     positionKey[ key ] = iKey
-    positionKeyInv[ iKey ] = key
 
-  return positionKey, positionKeyInv
+  return positionKey, orderedKeys
 
 def getRank( positionKey, labels, value ):
 
@@ -81,7 +79,7 @@ def writeChordData( labelJsonFileName, matrixFileName, outputFileName ):
   labels, matrix = processData( labels, matrix )
   
   chordData = createChordData( labels )
-  positionKey, positionKeyInv = createPositionKey( labels )
+  positionKey, orderedKeys = createPositionKey( labels )
 
   source, dest, quant = classifyMatrix( matrix )
 
@@ -97,7 +95,7 @@ def writeChordData( labelJsonFileName, matrixFileName, outputFileName ):
 
   data = {
     "chordData" : chordData,
-    "labelData" : positionKeyInv
+    "labelData" : orderedKeys
   }
 
   with open( outputFileName, 'w' ) as json_file:
