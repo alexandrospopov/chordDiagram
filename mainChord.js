@@ -57,7 +57,7 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
   .append("textPath")
     .attr("xlink:href", (d,i) =>  "#arcLabel_" + i )
     .text(function(chords, i){return labelData[i];})
-    .style("fill", "darkblue")
+    .style("fill", "#35978f")
     .style('font-weight', 'bold');
 
 
@@ -113,23 +113,18 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
                             .attr( 'class','checkBoxDiv_label' )
                             .html( d => "   " + d)
 
-  var brushDiv = d3.select("#timeSlider").append("svg")
-                   .attr("width", width + marginSides + marginRight)
-                   .attr("height", height + marginTop)
-                   .append("g")
-                   .attr('id',"timeSliderSvg")
-                   .attr("transform", "translate(" + marginSides + "," + marginTop + ")")
-                   .call(d3.axisBottom()
-                           .scale(timeDomain)
-                           .tickFormat( d => deduceMonthAndYear( d ) )            
-                           .ticks(4));
+  var brushRect = d3.select("#brushSvg")
 
-  var brush = d3.brushX()
+  var brush = d3.brushX() 
                 .extent([[0,0], [width,height]])
+                .on("brush", brushed);
 
-  var brushg = brushDiv.append("g")
-                       .attr("class", "brush")
-                       .call( brush ) 
+  var brushg = brushRect.append("g")
+                  .attr("class", "brush")
+                  .call( brush ) 
 
+function brushed(){
+  console.log( 'cii')
+}
 
 })

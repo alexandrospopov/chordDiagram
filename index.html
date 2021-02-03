@@ -19,7 +19,7 @@
           <svg id="mainChord" width="800" height="800"  style="display:block"></svg>
         </div>
         <div class="col-lg-4" id="informationPanel" > 
-          <div id="armyChoice">
+          <div id="vizChoice">
             <br>
             <h2> Option de visualisation </h2>
 
@@ -34,21 +34,23 @@
             <div>
               <input type="radio" id="lineaire" name="affichageType" value="lineaire"
                      checked>
-              <label for="huey"> Lineaire </label>
+              <label for="lineaire"> Lineaire </label>
             </div>
             
             <div>
               <input type="radio" id="logarithmique" name="affichageType" value="logarithmique">
-              <label for="dewey"> Logarithmique </label>
+              <label for="logarithmique"> Logarithmique </label>
             </div>
             
             <div>
               <input type="radio" id="relatif" name="affichageType" value="relatif">
-              <label for="louie"> Relatif </label>
+              <label for="relatif"> Relatif </label>
             </div>
-            
-            <p> Slider taille qte des fibres </p>
 
+            <svg width=350 height =120 id="brushSvg"> 
+              <rect width=350 height =120 fill="#35978f" id="brushRect"> 
+            </svg>
+            
           </div>
         </div>
         <div class="col-lg-4" id="informationPanel_2" >  >
