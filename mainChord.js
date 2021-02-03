@@ -17,9 +17,6 @@ const chord = d3.chord()
 
 const mainChord = d3.select( "#mainChord" );
 
-
-
-// const formatValue = d => d
 const svg = mainChord.attr('width', width)
                      .attr('height', height)
                      .attr("viewBox", [-width / 2, -height / 2, width, height])
@@ -32,7 +29,15 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
   labelData = file[0].labelData
   console.log( chordData, labelData )
 
-  const chords = chord(chordData);
+  chordDataModified = chordData
+  for (let i = 0; i < chordData.length; i++) {
+      chordDataModified[ i ][ i ] = 0
+  }
+
+  var chords = chord( chordDataModified );
+  
+
+  console.log( chordDataModified )
 
   const group = svg.append("g")
                    .selectAll("g")
@@ -47,11 +52,10 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
      .attr("fill-opacity", 0.67)
       .selectAll("path")
       .data(chords)
-      .join("path")
+      .join( 
+        function(enter) { 
+          return enter.append("path") } )
         .attr('class', 'chord')
         .attr("d", ribbon)
-        // .style("fill", function(d){ return "url(#" + getGradID(d) + ")"; })
-        // .attr("fill", d => color(d.target.index))
-        // .attr("stroke", d => d3.rgb(color(d.target.index)).darker());
 
 })
