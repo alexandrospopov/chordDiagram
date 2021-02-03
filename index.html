@@ -19,25 +19,44 @@
           <svg id="mainChord" width="800" height="800"  style="display:block"></svg>
         </div>
         <div class="col-lg-4" id="informationPanel" > 
-          <br>
-          <h1> Réglages</h1>  
-          <br>
           <div id="armyChoice">
             <br>
             <h2> Option de visualisation </h2>
-            <p> Slider taille qte des fibres </p>
-            <p> Lineaire - Log - Relatif </p>
-            <p> Enlever la diagonale </p>
-          </div>
-          <div id="areaChoice">
-            <h2> Choix des aires </h2>
-          </div>  
-        </div>
-      </div>
-    
-    </div>
 
-      
+            <br> 
+            <br> 
+            <input type="checkbox" id="cb_selfLink" name="selfLink" value="selfLink" checked="checked"> Show self-link
+
+            <br> 
+            <br> 
+
+            <p> Représentation des données </p>
+            <div>
+              <input type="radio" id="lineaire" name="affichageType" value="lineaire"
+                     checked>
+              <label for="huey"> Lineaire </label>
+            </div>
+            
+            <div>
+              <input type="radio" id="logarithmique" name="affichageType" value="logarithmique">
+              <label for="dewey"> Logarithmique </label>
+            </div>
+            
+            <div>
+              <input type="radio" id="relatif" name="affichageType" value="relatif">
+              <label for="louie"> Relatif </label>
+            </div>
+            
+            <p> Slider taille qte des fibres </p>
+
+          </div>
+        </div>
+        <div class="col-lg-4" id="informationPanel_2" >  >
+          <div id="areaChoice">
+              <h2> Choix des aires </h2>
+            </div>  
+      </div>
+      </div>
     </div>
     
     <script src="mainChord.js"></script>

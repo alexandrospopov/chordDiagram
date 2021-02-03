@@ -23,6 +23,7 @@ const svg = mainChord.attr('width', width)
                      .attr("font-size", 10)
                      .attr("font-family", "sans-serif");
 
+
 Promise.all([ d3.json( "data.json" ), ]).then(function( file ) 
 {
   chordData = file[0].chordData
@@ -111,6 +112,24 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
   divAreaChoiceCheckBoxEnter.append('label')
                             .attr( 'class','checkBoxDiv_label' )
                             .html( d => "   " + d)
+
+  var brushDiv = d3.select("#timeSlider").append("svg")
+                   .attr("width", width + marginSides + marginRight)
+                   .attr("height", height + marginTop)
+                   .append("g")
+                   .attr('id',"timeSliderSvg")
+                   .attr("transform", "translate(" + marginSides + "," + marginTop + ")")
+                   .call(d3.axisBottom()
+                           .scale(timeDomain)
+                           .tickFormat( d => deduceMonthAndYear( d ) )            
+                           .ticks(4));
+
+  var brush = d3.brushX()
+                .extent([[0,0], [width,height]])
+
+  var brushg = brushDiv.append("g")
+                       .attr("class", "brush")
+                       .call( brush ) 
 
 
 })
