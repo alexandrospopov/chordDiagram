@@ -30,7 +30,7 @@ def createChordData( labels ):
 def createPositionKey( labels ):
 
   orderedKeys = labels.keys()
-  orderedKeys.sort()
+  orderedKeys.sort(key=lambda v: v.upper())
 
   positionKey = {}
   for iKey, key in enumerate( orderedKeys ):
