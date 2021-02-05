@@ -12,8 +12,6 @@ function updateParametersViz(){
  
   let affichageType = document.querySelector('input[name=affichageType]:checked').value
 
-  console.log( affichageType )
-
   if ( !showSelfLink )
   {
     for (let i = 0; i < chordData.length; i++) 
@@ -51,7 +49,6 @@ function updateParametersViz(){
     }
     }
   }
-  console.log( chordData )
   drawChord( chordData, labelData )
 
 })
@@ -99,22 +96,29 @@ const widthBrush = 3 * width / 4 - 30 ;
 const heightBrush = 150;
 
 maxRange = d3.scaleLinear()
-.domain( [0,100])
-.range([0, width]);
+              .domain( [0,100])
+              .range([0, widthBrush]);
 
 var brushSvg = d3.select("#brushSvg")
                  .attr( "width", widthBrush )
                  .attr( "height", heightBrush  )
                  .attr("transform", "translate(" + 30 + "," + 0 + ")")
                  .call( d3.axisBottom()
-                          .scale(maxRange) )
+                          .scale(maxRange)
+                          .tickFormat( d=> d )            
+                          .ticks(4));
 
+  brushSvg.selectAll("text")  
+          .attr("font-size", 15)
+          .attr("dy", "10px")
+                   
 
 
 var brushRect = brushSvg.append("rect")
                         .attr( "width", widthBrush )
                         .attr( "height", heightBrush )
                         .attr("fill", "#35978f" )
+                        .attr("fill-opacity", 0.67)
 
 
 var brush = d3.brushX() 
