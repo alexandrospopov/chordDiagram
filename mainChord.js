@@ -28,10 +28,6 @@ const svg = mainChord.attr('width', width)
 
 color = d3.scaleOrdinal( d3.schemeBrBG[11] )
 
-// chordDataModified = chordData
-// for (let i = 0; i < chordData.length; i++) {
-//     chordDataModified[ i ][ i ] = 0
-// }
 
 
 function initializeChord(){
@@ -96,7 +92,7 @@ function drawChord( chordData,  labelData)
     .attr("offset", "100%")
     .attr("stop-color", d => color( d.target.index ) );
 
-  group.append("text")
+  group.append("text" )
     .attr("x", 2)
     .attr("dy", -3)
     .append("textPath")
@@ -156,11 +152,28 @@ function initializeAreaChoice( labelData )
 // console.log( 'cii')
 // }
 
-// d3.select("#cb_selfLink")
-//   .on("click", function() {
-//       d3.selectAll(".ribbon"). 
-//       let currentVisibility = this.checked ? "visible" : "hidden";
-//       d3.selectAll('.marker').attr('visibility', currentVisibility)
-// });
+
+function dataWoSelfConnection(){
+  Promise.all([ d3.json( "data.json" ), ]).then(function( file ) 
+{
+  chordData = file[0].chordData
+  labelData = file[0].labelData
+
+
+  chordDataModified = chordData
+  for (let i = 0; i < chordData.length; i++) {
+      chordDataModified[ i ][ i ] = 0
+  }
+
+
+  drawChord( chordDataModified, labelData )
+})
+}
+
+
+d3.select("#cb_selfLink")
+  .on("click", dataWoSelfConnection );
+
+
 
 initializeChord()
