@@ -27,7 +27,7 @@ function updateParametersViz(){
   if ( affichageType == "logarithmique"){
     for (let i = 0; i < chordData.length; i++) {
       for (let j = 0; j < chordData.length; j++) {
-        if (i != j &&  chordData[ i ][ j ] != 0 ){
+        if ( chordData[ i ][ j ] != 0 ){
           chordData[ i ][ j ] = Math.log( chordData[ i ][ j ] )
         }
       }
@@ -155,7 +155,7 @@ console.log( range )
 
 function updateBrush( chordData )
 {
-  maxChordData = getMax( chordData )
+maxChordData = getMax( chordData )
 
 maxRange = d3.scaleLinear()
               .domain( [0,maxChordData])
@@ -174,10 +174,6 @@ var brushSvg = d3.select("#brushSvg")
 var brush = d3.brushX() 
               .extent([[0,0], [ widthBrush , heightBrush  ]])
               .on("brush", brushed);
-
-var brushg = brushSvg.append("g")
-                     .attr("class", "brush")
-                     .call( brush ) 
 
 function brushed() {
 let range = d3.brushSelection(this)
