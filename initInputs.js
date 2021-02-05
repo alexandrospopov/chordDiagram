@@ -1,34 +1,73 @@
 
 
 
-function dataWoSelfConnection( show ){
+function updateParametersViz(){
   Promise.all([ d3.json( "data.json" ), ]).then(function( file ) 
 {
   chordData = file[0].chordData
   labelData = file[0].labelData
 
 
-  if (show)
-  {
-    drawChord( chordData, labelData ) 
-  }
-  else
+  let showSelfLink = document.getElementById("cb_selfLink").checked 
+ 
+  let affichageType = document.querySelector('input[name=affichageType]:checked').value
+
+  console.log( affichageType )
+
+  if ( !showSelfLink )
   {
     for (let i = 0; i < chordData.length; i++) 
     {
         chordData[ i ][ i ] = 0
     }
-    drawChord( chordData, labelData )
   }
+
+  let sum = 0
+
+  if ( affichageType == "logarithmique"){
+    for (let i = 0; i < chordData.length; i++) {
+      for (let j = 0; j < chordData.length; j++) {
+        if (i != j &&  chordData[ i ][ j ] != 0 ){
+          chordData[ i ][ j ] = Math.log( chordData[ i ][ j ] )
+        }
+      }
+    }
+  }
+  else if ( affichageType == "relatif"){
+    for (let i = 0; i < chordData.length; i++) {
+      sum = 0 
+      for (let j = 0; j < chordData.length; j++) {
+        sum = sum + chordData[ i ][ j ]
+      }
+      if ( sum != 0 ){
+      for (let j = 0; j < chordData.length; j++) {
+        chordData[ i ][ j ] = Math.round( chordData[ i ][ j ] * 100 / sum )
+      }
+    }
+    else{
+      for (let j = 0; j < chordData.length; j++) {
+        chordData[ i ][ j ] = 0
+      }
+    }
+    }
+  }
+  console.log( chordData )
+  drawChord( chordData, labelData )
+
 })
 }
 
 
 d3.select("#cb_selfLink")
-.on("click", function(){
-  this.checked ? dataWoSelfConnection( 1 ) : dataWoSelfConnection( 0 ) 
-} )
+.on("click", updateParametersViz )
 
+
+d3.select("#rb_lineaire")
+.on("click", updateParametersViz )
+d3.select("#rb_logarithmique")
+.on("click", updateParametersViz )
+d3.select("#rb_relatif")
+.on("click", updateParametersViz )
 
 function initializeAreaChoice( labelData )
 {
