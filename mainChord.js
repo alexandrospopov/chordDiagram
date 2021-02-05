@@ -91,7 +91,7 @@ function drawChord( chordData,  labelData)
   ribbons.enter().append( "path" )
                  .attr( "class", "ribbons" )
                  .attr( "d", ribbon )
-                //  .style("fill", d =>  "url(#" + getGradID(d) + ")" )
+                 .style("fill", d =>  "url(#" + getGradID(d) + ")" )
 
   d3.select("#canvas").selectAll("path").attr('d', ribbon )
                           
@@ -99,26 +99,26 @@ function drawChord( chordData,  labelData)
 
 
 
-  // //Create the gradients definitions for each chord
-  // const grads = svg.append("defs").selectAll("linearGradient")
-  //   .data(chords)
-  //   .enter().append("linearGradient")
-  //   .attr("id", getGradID)
-  //   .attr("gradientUnits", "userSpaceOnUse")
-  //   .attr("x1", d => innerRadius * Math.cos((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2) )
-  //   .attr("y1", d => innerRadius * Math.sin((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2) )
-  //   .attr("x2", d => innerRadius * Math.cos((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2) )
-  //   .attr("y2", d => innerRadius * Math.sin((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2) )
+  //Create the gradients definitions for each chord
+  const grads = svg.append("defs").selectAll("linearGradient")
+    .data(chords)
+    .enter().append("linearGradient")
+    .attr("id", getGradID)
+    .attr("gradientUnits", "userSpaceOnUse")
+    .attr("x1", d => innerRadius * Math.cos((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2) )
+    .attr("y1", d => innerRadius * Math.sin((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2) )
+    .attr("x2", d => innerRadius * Math.cos((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2) )
+    .attr("y2", d => innerRadius * Math.sin((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2) )
 
-  // //Set the starting color (at 0%)
-  // grads.append("stop")
-  //   .attr("offset", "0%")
-  //   .attr("stop-color", d => color( d.source.index ) );
+  //Set the starting color (at 0%)
+  grads.append("stop")
+    .attr("offset", "0%")
+    .attr("stop-color", d => color( d.source.index ) );
 
-  // //Set the ending color (at 100%)
-  // grads.append("stop")
-  //   .attr("offset", "100%")
-  //   .attr("stop-color", d => color( d.target.index ) );
+  //Set the ending color (at 100%)
+  grads.append("stop")
+    .attr("offset", "100%")
+    .attr("stop-color", d => color( d.target.index ) );
 
 
 }
