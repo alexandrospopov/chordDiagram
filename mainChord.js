@@ -50,33 +50,37 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
 
 function drawChord( chordData,  labelData)
 {
-  var chords = chord( chordData );
+  const chords = chord( chordData );
 
-  var arcGroup = svg.selectAll( ".arcPath" )
-                    .data( chords.groups, (d,i) => d.index   )
+  var arcPath = svg.selectAll( ".arcPath" )
+                    .data( chords.groups )
 
-  arcGroup.exit().remove()
+  arcPath.exit().remove()
 
-  newArcGroup = arcGroup.enter()
-                        .append("path")
-                        .attr("class","arcPath")
+  arcPathNew = arcPath.enter()
+                      .append("path")
+                      .attr("class","arcPath")
+                      .attr("class", "arcPath")
+                      .attr("id", (d,i) => "arcPath" + i ) 
+                      .attr("fill", (d,i) => color( i ))
+                      .attr("stroke", (d,i) => d3.rgb(color( i )).darker())
 
   d3.selectAll(".arcPath").attr("d", arc )
 
-  // newArcGroup.append("path")
-          // .attr("class", "arcPath")
-          // .attr("id", (d,i) => "arcPath" + i ) 
-          // .attr("fill", (d,i) => color( i ))
-          // .attr("stroke", (d,i) => d3.rgb(color( i )).darker())
+  var arcLabel = svg.selectAll( ".arcLabel" )
+                    .data( chords.groups )
 
-  // newArcGroup.append("text")
-  //         .attr("x", 2)
-  //         .attr("dy", -3)
-  //         .append("textPath")
-  //         .text( (d, i) =>  labelData[ i ] ) 
-          // .attr("xlink:href", (d, i) =>  "#arcPath" + i )
-            // .style("fill", "#35978f")
-            // .style('font-weight', 'bold');
+  arcLabel.exit().remove()
+
+  arcLabelNew = arcLabel.enter()
+                        .append("text")
+                        .attr("x", 2)
+                        .attr("dy", -3)
+                        .append("textPath")
+                        .text( (d, i) =>  labelData[ i ] ) 
+                        .attr("xlink:href", (d, i) =>  "#arcPath" + i )
+                          .style("fill", "#35978f")
+                          .style('font-weight', 'bold');
 
 
   var ribbons = d3.select("#canvas").selectAll("path")
