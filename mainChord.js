@@ -34,12 +34,21 @@ color = d3.scaleOrdinal( d3.schemeBrBG[11] )
 // }
 
 
+function initializeChord(){
 
 Promise.all([ d3.json( "data.json" ), ]).then(function( file ) 
 {
   chordData = file[0].chordData
   labelData = file[0].labelData
 
+  drawChord( chordData, labelData )
+  initializeAreaChoice( labelData )
+
+})
+}
+
+function drawChord( chordData,  labelData)
+{
   var chords = chord( chordData );
   
   const group = svg.selectAll("g")
@@ -53,16 +62,6 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
                         .attr("fill", (d,i) => color( i ))
                         .attr("stroke", (d,i) => d3.rgb(color( i )).darker())
 
-  group.append("text")
-       .attr("x", 2)
-       .attr("dy", -3)
-       .append("textPath")
-         .attr("xlink:href", (d, i) =>  "#arcLabel_" + i )
-         .text( (d, i) =>  labelData[ i ] ) 
-         .style("fill", "#35978f")
-         .style('font-weight', 'bold');
-
-
   const ribbons = svg.append("g")
                        .attr("fill-opacity", 0.67)
                      .selectAll("path")
@@ -70,6 +69,7 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
                      .enter().append("path")
                        .attr("class", "ribbons")
                        .attr("d", ribbon)
+                       .attr("originalValue", d =>  d.source.value )
                        .style("fill", d =>  "url(#" + getGradID(d) + ")" )
       
   function getGradID(d){ 
@@ -96,6 +96,19 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
     .attr("offset", "100%")
     .attr("stop-color", d => color( d.target.index ) );
 
+  group.append("text")
+    .attr("x", 2)
+    .attr("dy", -3)
+    .append("textPath")
+      .attr("xlink:href", (d, i) =>  "#arcLabel_" + i )
+      .text( (d, i) =>  labelData[ i ] ) 
+      .style("fill", "#35978f")
+      .style('font-weight', 'bold');
+
+}
+
+function initializeAreaChoice( labelData )
+{
   var divAreaChoice = d3.select('#areaChoice')
 
   var divAreaChoiceCheckBox = divAreaChoice.selectAll('.checkBoxDiv')
@@ -115,30 +128,39 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
   divAreaChoiceCheckBoxEnter.append('label')
                             .attr( 'class','checkBoxDiv_label' )
                             .html( d => "   " + d)
-
-  const widthBrush = 3 * width / 4 - 30 ;
-  const heightBrush = 150;
-  
-  var brushSvg = d3.select("#brushSvg")
-                   .attr( "width", widthBrush )
-                   .attr( "height", heightBrush  )
-                   .attr("transform", "translate(" + 30 + "," + 0 + ")")
-
-  var brushRect = brushSvg.append("rect")
-                          .attr( "width", widthBrush )
-                          .attr( "height", heightBrush )
-                          .attr("fill", "#35978f" )
- 
-  var brush = d3.brushX() 
-                .extent([[0,0], [ widthBrush , heightBrush  ]])
-                .on("brush", brushed);
-
-  var brushg = brushSvg.append("g")
-                       .attr("class", "brush")
-                       .call( brush ) 
-
-function brushed(){
-  console.log( 'cii')
 }
 
-})
+
+// const widthBrush = 3 * width / 4 - 30 ;
+// const heightBrush = 150;
+
+// var brushSvg = d3.select("#brushSvg")
+//                  .attr( "width", widthBrush )
+//                  .attr( "height", heightBrush  )
+//                  .attr("transform", "translate(" + 30 + "," + 0 + ")")
+
+// var brushRect = brushSvg.append("rect")
+//                         .attr( "width", widthBrush )
+//                         .attr( "height", heightBrush )
+//                         .attr("fill", "#35978f" )
+
+// var brush = d3.brushX() 
+//               .extent([[0,0], [ widthBrush , heightBrush  ]])
+//               .on("brush", brushed);
+
+// var brushg = brushSvg.append("g")
+//                      .attr("class", "brush")
+//                      .call( brush ) 
+
+// function brushed(){
+// console.log( 'cii')
+// }
+
+// d3.select("#cb_selfLink")
+//   .on("click", function() {
+//       d3.selectAll(".ribbon"). 
+//       let currentVisibility = this.checked ? "visible" : "hidden";
+//       d3.selectAll('.marker').attr('visibility', currentVisibility)
+// });
+
+initializeChord()
