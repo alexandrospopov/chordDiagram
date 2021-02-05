@@ -51,22 +51,37 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
 function drawChord( chordData,  labelData)
 {
   var chords = chord( chordData );
-  
-  // var group = svg.selectAll( "g" )
-  //                .data( chords.groups )
-  //                .enter().append("g");
 
-  // var arcLabel = group.append("path")
-  //                     .attr("class", "arcLabel")
-  //                     .attr("d", arc)
-  //                     .attr("id", (d,i) => "arcLabel_" + i ) 
-  //                     .attr("fill", (d,i) => color( i ))
-  //                     .attr("stroke", (d,i) => d3.rgb(color( i )).darker())
+  var arcGroup = svg.selectAll( ".arcPath" )
+                    .data( chords.groups, (d,i) => d.index   )
+
+  arcGroup.exit().remove()
+
+  newArcGroup = arcGroup.enter()
+                        .append("path")
+                        .attr("class","arcPath")
+
+  d3.selectAll(".arcPath").attr("d", arc )
+
+  // newArcGroup.append("path")
+          // .attr("class", "arcPath")
+          // .attr("id", (d,i) => "arcPath" + i ) 
+          // .attr("fill", (d,i) => color( i ))
+          // .attr("stroke", (d,i) => d3.rgb(color( i )).darker())
+
+  // newArcGroup.append("text")
+  //         .attr("x", 2)
+  //         .attr("dy", -3)
+  //         .append("textPath")
+  //         .text( (d, i) =>  labelData[ i ] ) 
+          // .attr("xlink:href", (d, i) =>  "#arcPath" + i )
+            // .style("fill", "#35978f")
+            // .style('font-weight', 'bold');
+
 
   var ribbons = d3.select("#canvas").selectAll("path")
                                     .data( chords, getGradID )
 
-  console.log( chords)
   ribbons.exit().remove()
                       
   ribbons.enter().append( "path" )
@@ -78,8 +93,7 @@ function drawChord( chordData,  labelData)
                           
 
 
-  function getGradID(d){ 
-    return "linkGrad-" + d.source.index + "-" + d.target.index; }
+
 
   // //Create the gradients definitions for each chord
   // const grads = svg.append("defs").selectAll("linearGradient")
@@ -102,14 +116,6 @@ function drawChord( chordData,  labelData)
   //   .attr("offset", "100%")
   //   .attr("stop-color", d => color( d.target.index ) );
 
-  // group.append("text" )
-  //   .attr("x", 2)
-  //   .attr("dy", -3)
-  //   .append("textPath")
-  //     .attr("xlink:href", (d, i) =>  "#arcLabel_" + i )
-  //     .text( (d, i) =>  labelData[ i ] ) 
-  //     .style("fill", "#35978f")
-  //     .style('font-weight', 'bold');
 
 }
 
@@ -199,3 +205,6 @@ initializeChord()
 //       let currentVisibility = this.checked ? "visible" : "hidden";
 //       d3.selectAll('.marker').attr('visibility', currentVisibility)
 // });
+
+function getGradID(d){ 
+  return "linkGrad-" + d.source.index + "-" + d.target.index; }
