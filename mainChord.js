@@ -90,7 +90,6 @@ function drawChord( chordData,  labelData)
                       
   ribbons.enter().append( "path" )
                  .attr( "class", "ribbons" )
-                 .attr( "d", ribbon )
                  .style("fill", d =>  "url(#" + getGradID(d) + ")" )
 
   d3.select("#canvas").selectAll("path").attr('d', ribbon )
