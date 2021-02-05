@@ -1,4 +1,6 @@
 
+const widthBrush = 3 * width / 4 - 30 ;
+const heightBrush = 150;
 
 
 function updateParametersViz(){
@@ -50,9 +52,11 @@ function updateParametersViz(){
     }
   }
   drawChord( chordData, labelData )
-
+  updateBrush( chordData )
 })
 }
+
+
 
 
 d3.select("#cb_selfLink")
@@ -90,19 +94,33 @@ function initializeAreaChoice( labelData )
 }
 
 
+
+function getMax( chordData ){
+  let M=0
+  for (let i = 0; i < chordData.length; i++) {
+    for (let j = 0; j < chordData.length; j++) {
+      if (chordData[ i ][ j ] > M ){
+        M = chordData[ i ][ j ]
+      }
+    }
+  }
+  return M
+}
+
+
 function initializeBrush( chordData )
 {
-const widthBrush = 3 * width / 4 - 30 ;
-const heightBrush = 150;
+
+maxChordData = getMax( chordData )
+
 
 maxRange = d3.scaleLinear()
-              .domain( [0,100])
+              .domain( [0,maxChordData])
               .range([0, widthBrush]);
 
 var brushSvg = d3.select("#brushSvg")
                  .attr( "width", widthBrush )
                  .attr( "height", heightBrush  )
-                 .attr("transform", "translate(" + 30 + "," + 0 + ")")
                  .call( d3.axisBottom()
                           .scale(maxRange)
                           .tickFormat( d=> d )            
@@ -112,8 +130,6 @@ var brushSvg = d3.select("#brushSvg")
           .attr("font-size", 15)
           .attr("dy", "10px")
                    
-
-
 var brushRect = brushSvg.append("rect")
                         .attr( "width", widthBrush )
                         .attr( "height", heightBrush )
@@ -135,49 +151,38 @@ let range = d3.brushSelection(this)
 
 console.log( range )
 }
-                    
-
-
-
 }
 
-initializeBrush()
+function updateBrush( chordData )
+{
+  maxChordData = getMax( chordData )
 
-// var svg = d3.select("#timeSlider").append("svg")
-// .attr("width", width + marginSides + marginRight)
-// .attr("height", height + marginTop)
-// .append("g")
-// .attr('id',"timeSliderSvg")
-// .attr("transform", "translate(" + marginSides + "," + marginTop + ")")
-// .call(d3.axisBottom()
-//         .scale(timeDomain)
-//         .tickFormat( d => deduceMonthAndYear( d ) )            
-//         .ticks(4));
+maxRange = d3.scaleLinear()
+              .domain( [0,maxChordData])
+              .range([0, widthBrush]);
 
-// svg.selectAll("text")  
-// .style("text-anchor", "start")
-// .attr("font-size", 15)
-// .attr("dx", "0.6em")
-// .attr("dy", ".15em")
-// .attr("transform", "rotate(-65)" );
+var brushSvg = d3.select("#brushSvg")
+                 .call( d3.axisBottom()
+                          .scale(maxRange)
+                          .tickFormat( d=> d )            
+                          .ticks(4));
 
+  brushSvg.selectAll("text")  
+          .attr("font-size", 15)
+          .attr("dy", "10px")
+                   
+var brush = d3.brushX() 
+              .extent([[0,0], [ widthBrush , heightBrush  ]])
+              .on("brush", brushed);
 
-// var brush = d3.brushX()
-// .extent([[0,0], [width,height]])
-// .on("brush", brushed);
+var brushg = brushSvg.append("g")
+                     .attr("class", "brush")
+                     .call( brush ) 
 
-// var brushg = svg.append("g")
-//     .attr("class", "brush")
-//     .call( brush ) 
+function brushed() {
+let range = d3.brushSelection(this)
+            .map( maxRange.invert );
 
-// updateTimePrint( mapDict[mapName].admin.dates  )
-    
-// function brushed() {
-// let range = d3.brushSelection(this)
-//     .map( timeDomain.invert );
-
-// selectedTimePeriodStart = range[0]
-// selectedTimePeriodEnd = range[1]
-// overlay.draw()
-// updateTimePrint( range )
-// }
+console.log( range )
+}
+}

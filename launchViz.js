@@ -8,6 +8,7 @@ function initializeViz(){
   
     drawChord( chordData, labelData )
     initializeAreaChoice( labelData )
+    initializeBrush( chordData )
   
   })
   }
