@@ -26,21 +26,21 @@ const svg = mainChord.attr('width', width)
                      .attr("font-size", 10)
                      .attr("font-family", "sans-serif");
 
+color = d3.scaleOrdinal( d3.schemeBrBG[11] )
+
+// chordDataModified = chordData
+// for (let i = 0; i < chordData.length; i++) {
+//     chordDataModified[ i ][ i ] = 0
+// }
+
+
 
 Promise.all([ d3.json( "data.json" ), ]).then(function( file ) 
 {
   chordData = file[0].chordData
   labelData = file[0].labelData
-  console.log( chordData, labelData )
 
-  color = d3.scaleOrdinal( d3.schemeBrBG[11] )
-
-  chordDataModified = chordData
-  for (let i = 0; i < chordData.length; i++) {
-      chordDataModified[ i ][ i ] = 0
-  }
-
-  var chords = chord( chordDataModified );
+  var chords = chord( chordData );
   
   const group = svg.selectAll("g")
                    .data(chords.groups)
@@ -50,30 +50,30 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
                         .attr("class", "arcLabel")
                         .attr("d", arc)
                         .attr("id", (d,i) => "arcLabel_" + i ) 
-                        .attr("fill", d => color(d.index))
-                        .attr("stroke", d => d3.rgb(color(d.index)).darker())
+                        .attr("fill", (d,i) => color( i ))
+                        .attr("stroke", (d,i) => d3.rgb(color( i )).darker())
 
   group.append("text")
-  .attr("x", 2)
-  .attr("y", -20)
-  .attr("dy", 15)
-  .append("textPath")
-    .attr("xlink:href", (d,i) =>  "#arcLabel_" + i )
-    .text(function(chords, i){return labelData[i];})
-    .style("fill", "#35978f")
-    .style('font-weight', 'bold');
+       .attr("x", 2)
+       .attr("dy", -3)
+       .append("textPath")
+         .attr("xlink:href", (d, i) =>  "#arcLabel_" + i )
+         .text( (d, i) =>  labelData[ i ] ) 
+         .style("fill", "#35978f")
+         .style('font-weight', 'bold');
 
 
   const ribbons = svg.append("g")
-      .attr("fill-opacity", 0.67)
-    .selectAll("path")
-    .data(chords)
-    .enter().append("path")
-      .attr("class", "ribbons")
-      .attr("d", ribbon)
-      .style("fill", function(d){ return "url(#" + getGradID(d) + ")"; })
+                       .attr("fill-opacity", 0.67)
+                     .selectAll("path")
+                     .data(chords)
+                     .enter().append("path")
+                       .attr("class", "ribbons")
+                       .attr("d", ribbon)
+                       .style("fill", d =>  "url(#" + getGradID(d) + ")" )
       
-  function getGradID(d){ return "linkGrad-" + d.source.index + "-" + d.target.index; }
+  function getGradID(d){ 
+    return "linkGrad-" + d.source.index + "-" + d.target.index; }
 
   //Create the gradients definitions for each chord
   const grads = svg.append("defs").selectAll("linearGradient")
@@ -81,25 +81,25 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
     .enter().append("linearGradient")
     .attr("id", getGradID)
     .attr("gradientUnits", "userSpaceOnUse")
-    .attr("x1", function(d,i) { return innerRadius * Math.cos((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2); })
-    .attr("y1", function(d,i) { return innerRadius * Math.sin((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2); })
-    .attr("x2", function(d,i) { return innerRadius * Math.cos((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2); })
-    .attr("y2", function(d,i) { return innerRadius * Math.sin((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2); })
+    .attr("x1", d => innerRadius * Math.cos((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2) )
+    .attr("y1", d => innerRadius * Math.sin((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2) )
+    .attr("x2", d => innerRadius * Math.cos((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2) )
+    .attr("y2", d => innerRadius * Math.sin((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2) )
 
   //Set the starting color (at 0%)
   grads.append("stop")
     .attr("offset", "0%")
-    .attr("stop-color", function(d){ return color( d.source.index ); });
+    .attr("stop-color", d => color( d.source.index ) );
 
   //Set the ending color (at 100%)
   grads.append("stop")
     .attr("offset", "100%")
-    .attr("stop-color", function(d){ return color( d.target.index ); });
+    .attr("stop-color", d => color( d.target.index ) );
 
   var divAreaChoice = d3.select('#areaChoice')
 
   var divAreaChoiceCheckBox = divAreaChoice.selectAll('.checkBoxDiv')
-                              .data( labelData ) 
+                                           .data( labelData ) 
 
   var divAreaChoiceCheckBoxEnter = divAreaChoiceCheckBox.enter()
                                                         .append('div')
@@ -134,8 +134,8 @@ Promise.all([ d3.json( "data.json" ), ]).then(function( file )
                 .on("brush", brushed);
 
   var brushg = brushSvg.append("g")
-                  .attr("class", "brush")
-                  .call( brush ) 
+                       .attr("class", "brush")
+                       .call( brush ) 
 
 function brushed(){
   console.log( 'cii')
