@@ -60,7 +60,7 @@ function drawChord( chordData,  labelData)
                       .attr("fill", (d,i) => color( i ))
                       .attr("stroke", (d,i) => d3.rgb(color( i )).darker())
 
-  d3.selectAll(".arcPath").attr("d", arc )
+  d3.selectAll(".arcPath").transition().duration(1500).attr("d", arc )
 
   var arcLabel = svg.selectAll( ".arcLabel" )
                     .data( chords.groups )
@@ -87,7 +87,10 @@ function drawChord( chordData,  labelData)
                  .attr( "class", "ribbons" )
                  .style("fill", d =>  "url(#" + getGradID(d) + ")" )
 
-  d3.select("#canvas").selectAll("path").attr('d', ribbon )
+  d3.select("#canvas").selectAll("path")
+                      .transition()
+                      .duration(1500)
+                      .attr('d', ribbon )
                           
 
   //Create the gradients definitions for each chord

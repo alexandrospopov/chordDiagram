@@ -66,10 +66,10 @@ function updateParametersViz(){
     }
   }
 
-  let listUnchecked = d3.select("#areaChoice")
-                        .selectAll("input[type='checkbox']:not(:checked)")
-                        .each( el => { let labelToCancel = labelData.indexOf( el );
-                                       cancelLabels( chordData, labelToCancel) } )
+  d3.select("#areaChoice")
+    .selectAll("input[type='checkbox']:not(:checked)")
+    .each( el => { let labelToCancel = labelData.indexOf( el );
+                   cancelLabels( chordData, labelToCancel) } )
 
   drawChord( chordData, labelData )
   updateBrush( chordData )
