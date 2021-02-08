@@ -53,6 +53,12 @@ function updateParametersViz(){
     }
   }
 
+  let listUnchecked = d3.select("#areaChoice")
+                        .selectAll("input[type='checkbox']:not(:checked)")
+                        .each( el => console.log( el ) )
+
+  console.log( listUnchecked )
+
   drawChord( chordData, labelData )
   updateBrush( chordData )
 })
@@ -88,7 +94,7 @@ function initializeAreaChoice( labelData )
                             .attr('id', d => 'cb_'+ d )
                             .attr('name', d=>  d )
                             .attr('value', d=> d )
-                            .attr('checked', "checked" )
+                            .attr('checked', true )
 
   divAreaChoiceCheckBoxEnter.append('label')
                             .attr( 'class','checkBoxDiv_label' )
