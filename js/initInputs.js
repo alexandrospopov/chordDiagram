@@ -3,6 +3,19 @@ const widthBrush = 3 * width / 4 - 30 ;
 const heightBrush = 150;
 
 
+
+d3.select("#cb_selfLink")
+.on("click", updateParametersViz )
+
+
+d3.select("#rb_lineaire")
+.on("click", updateParametersViz )
+d3.select("#rb_logarithmique")
+.on("click", updateParametersViz )
+d3.select("#rb_relatif")
+.on("click", updateParametersViz )
+
+
 function updateParametersViz(){
   Promise.all([ d3.json( "data.json" ), ]).then(function( file ) 
 {
@@ -55,28 +68,27 @@ function updateParametersViz(){
 
   let listUnchecked = d3.select("#areaChoice")
                         .selectAll("input[type='checkbox']:not(:checked)")
-                        .each( el => console.log( el ) )
-
-  console.log( listUnchecked )
+                        .each( el => { let labelToCancel = labelData.indexOf( el );
+                                       cancelLabels( chordData, labelToCancel) } )
 
   drawChord( chordData, labelData )
   updateBrush( chordData )
 })
 }
 
+function cancelLabels( chordData, labelToCancel ){
+
+  for (let i = 0; i < chordData.length; i++) {
+    for (let j = 0; j < chordData.length; j++) {
+      if ( i == labelToCancel || j == labelToCancel ){
+        chordData[ i ][ j ] = 0;
+      }
+    } 
+  }
+}
 
 
 
-d3.select("#cb_selfLink")
-.on("click", updateParametersViz )
-
-
-d3.select("#rb_lineaire")
-.on("click", updateParametersViz )
-d3.select("#rb_logarithmique")
-.on("click", updateParametersViz )
-d3.select("#rb_relatif")
-.on("click", updateParametersViz )
 
 function initializeAreaChoice( labelData )
 {
@@ -95,6 +107,7 @@ function initializeAreaChoice( labelData )
                             .attr('name', d=>  d )
                             .attr('value', d=> d )
                             .attr('checked', true )
+                            .on('click', updateParametersViz)
 
   divAreaChoiceCheckBoxEnter.append('label')
                             .attr( 'class','checkBoxDiv_label' )
