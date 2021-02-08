@@ -34,6 +34,8 @@ const canvas = svg.append("g")
 color = d3.scaleOrdinal( d3.schemeBrBG[11] )
 
 
+const defs = svg.append("defs")
+
 
 function getGradID(d)
 { 
@@ -89,25 +91,31 @@ function drawChord( chordData,  labelData)
                           
 
   //Create the gradients definitions for each chord
-  const grads = svg.append("defs").selectAll("linearGradient")
-    .data(chords)
-    .enter().append("linearGradient")
-    .attr("id", getGradID)
-    .attr("gradientUnits", "userSpaceOnUse")
+  const gradsDataJoin = defs.selectAll("linearGradient")
+                                          .data( chords, getGradID )
+
+  gradsDataJoin.exit().remove()
+
+  let gradsDataJoinEnter = gradsDataJoin.enter().append("linearGradient")
+                                        .attr("id", getGradID)
+                                        .attr("gradientUnits", "userSpaceOnUse")
+
+  gradsDataJoinEnter.append( "stop" )
+                    .attr("offset", "0%")
+                    .attr( "class", "gradient_source")
+                    .attr("stop-color", d => color( d.source.index ) );
+
+  gradsDataJoinEnter.append( "stop" )
+                    .attr("offset", "100%")
+                    .attr( "id", "gradient_target")
+                    .attr("stop-color", d => color( d.target.index ) );
+
+
+  let grads = d3.selectAll( "linearGradient" )
     .attr("x1", d => innerRadius * Math.cos((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2) )
     .attr("y1", d => innerRadius * Math.sin((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2) )
     .attr("x2", d => innerRadius * Math.cos((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2) )
     .attr("y2", d => innerRadius * Math.sin((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2) )
-
-  //Set the starting color (at 0%)
-  grads.append("stop")
-    .attr("offset", "0%")
-    .attr("stop-color", d => color( d.source.index ) );
-
-  //Set the ending color (at 100%)
-  grads.append("stop")
-    .attr("offset", "100%")
-    .attr("stop-color", d => color( d.target.index ) );
 
 
 }
