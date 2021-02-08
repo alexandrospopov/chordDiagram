@@ -14,14 +14,6 @@ function updateParametersViz(){
  
   let affichageType = document.querySelector('input[name=affichageType]:checked').value
 
-  if ( !showSelfLink )
-  {
-    for (let i = 0; i < chordData.length; i++) 
-    {
-        chordData[ i ][ i ] = 0
-    }
-  }
-
   let sum = 0
 
   if ( affichageType == "logarithmique"){
@@ -51,6 +43,16 @@ function updateParametersViz(){
     }
     }
   }
+
+
+  if ( !showSelfLink )
+  {
+    for (let i = 0; i < chordData.length; i++) 
+    {
+        chordData[ i ][ i ] = 0
+    }
+  }
+
   drawChord( chordData, labelData )
   updateBrush( chordData )
 })
@@ -149,6 +151,13 @@ function brushed() {
 let range = d3.brushSelection(this)
             .map( maxRange.invert );
 
+d3.selectAll( ".ribbons" )
+.style( "opacity", 1)
+.filter( d=> 
+  ( ( d.source.value < range[ 0 ] || d.source.value > range[ 1 ] ) &&
+    ( d.target.value < range[ 0 ] || d.target.value > range[ 1 ] ) ) )
+     .style( "opacity", 0 )
+
 console.log( range )
 }
 }
@@ -171,14 +180,4 @@ var brushSvg = d3.select("#brushSvg")
           .attr("font-size", 15)
           .attr("dy", "10px")
                    
-var brush = d3.brushX() 
-              .extent([[0,0], [ widthBrush , heightBrush  ]])
-              .on("brush", brushed);
-
-function brushed() {
-let range = d3.brushSelection(this)
-            .map( maxRange.invert );
-
-console.log( range )
-}
 }
