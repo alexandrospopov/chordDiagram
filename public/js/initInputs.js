@@ -200,3 +200,21 @@ var brushSvg = d3.select("#brushSvg")
           .attr("dy", "10px")
                    
 }
+
+
+
+
+// updateBrush( chordData )
+
+
+// let range = d3.brushSelection(d3.select(".brush").node())
+//               .map( maxRange.invert );
+//               console.log( range )
+
+// for (let i = 0; i < chordData.length; i++) {
+//   for (let j = 0; j < chordData.length; j++) {
+//     if ( chordData[ i ][ j ] > range[ 1 ]){
+//       chordData[ i ][ j ] = 0
+//     }
+//   }
+// }
