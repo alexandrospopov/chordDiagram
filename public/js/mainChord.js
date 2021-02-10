@@ -55,7 +55,6 @@ function drawChord( chordData,  labelData)
   arcPathNew = arcPath.enter()
                       .append("path")
                       .attr("class","arcPath")
-                      .attr("class", "arcPath")
                       .attr("id", (d,i) => "arcPath" + i ) 
                       .attr("fill", (d,i) => color( i ))
                       .attr("stroke", (d,i) => d3.rgb(color( i )).darker())
@@ -67,15 +66,15 @@ function drawChord( chordData,  labelData)
 
   arcLabel.exit().remove()
 
-  arcLabelNew = arcLabel.enter()
-                        .append("text")
-                        .attr("x", 2)
-                        .attr("dy", -3)
-                        .append("textPath")
-                        .text( (d, i) =>  labelData[ i ] ) 
-                        .attr("xlink:href", (d, i) =>  "#arcPath" + i )
-                          .style("fill", "#35978f")
-                          .style('font-weight', 'bold');
+  arcLabel.enter()
+          .append("text")
+          .attr("x", 2)
+          .attr("dy", -3)
+          .append("textPath")
+          .text( (d, i) =>  labelData[ i ] ) 
+          .attr("xlink:href", (d, i) =>  "#arcPath" + i )
+          .style("fill", "#35978f")
+          .style('font-weight', 'bold');
 
 
   var ribbons = d3.select("#canvas").selectAll("path")
@@ -86,6 +85,9 @@ function drawChord( chordData,  labelData)
   ribbons.enter().append( "path" )
                  .attr( "class", "ribbons" )
                  .style("fill", d =>  "url(#" + getGradID(d) + ")" )
+                 .on("mouseover", ribbon => visibleRibbonTooltip( ribbon ))
+                 .on("mouseout", () => hideToolTip());
+
 
   d3.select("#canvas").selectAll("path")
                       .transition()
