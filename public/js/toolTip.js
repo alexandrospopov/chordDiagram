@@ -1,6 +1,5 @@
 function visibleRibbonTooltip( ribbon, labelData ){
 
-    console.log( labelData )
     let valuesStr = "Values : " + ribbon.source.value 
     if ( ribbon.source.value != ribbon.target.value ) {
       valuesStr += " -> " + ribbon.target.value
@@ -15,14 +14,6 @@ function visibleRibbonTooltip( ribbon, labelData ){
     .transition()
     .style("opacity", .9);
   
-}
-
-function visibleCityTooltip( d, tooltip, tripList ){
-  tooltip.style("left", (d3.event.pageX + 5) + "px")
-         .style("top", (d3.event.pageY - 28) + "px")
-         .html( d.key + "<br>" + d.value.Geographie.Etat )
-         .transition()
-         .style("opacity", .9);
 }
 
 function hideToolTip(){ 
