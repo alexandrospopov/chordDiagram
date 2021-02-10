@@ -177,7 +177,17 @@ d3.selectAll( ".ribbons" )
     ( d.target.value < range[ 0 ] || d.target.value > range[ 1 ] ) ) )
      .style( "opacity", 0 )
 
-console.log( range )
+
+let txtUnits = ""
+if ( range[ 1 ] + range[ 0 ] > 10000 ){
+  range = range.map( x=> Math.round( x/1000) )
+  txtUnits = " (x1k) "
+}
+else{
+  range = range.map( x=> Math.round(x))
+}
+
+document.getElementById("title_brush").innerHTML = "Fibres range : From " + range[ 0 ] + " To " + range[ 1 ] + txtUnits 
 }
 }
 
@@ -201,20 +211,3 @@ var brushSvg = d3.select("#brushSvg")
                    
 }
 
-
-
-
-// updateBrush( chordData )
-
-
-// let range = d3.brushSelection(d3.select(".brush").node())
-//               .map( maxRange.invert );
-//               console.log( range )
-
-// for (let i = 0; i < chordData.length; i++) {
-//   for (let j = 0; j < chordData.length; j++) {
-//     if ( chordData[ i ][ j ] > range[ 1 ]){
-//       chordData[ i ][ j ] = 0
-//     }
-//   }
-// }
