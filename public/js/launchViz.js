@@ -1,20 +1,44 @@
 
-function initializeViz(){
+var json = []
 
-  Promise.all([ d3.json( "data.json" ), ]).then(function( file ) 
-  {
-    chordData = file[0].chordData
-    labelData = file[0].labelData
+var openFile = function(event) {
+  var input = event.target;
 
-    document.getElementById("cb_selfLink").checked = true;
-    document.getElementById("rb_lineaire").checked = true;
+  var reader = new FileReader();
+  reader.onload = function(){
+    const dataURL = reader.result;
+    json = JSON.parse( dataURL )
+    initializeViz(json)
+    
+  };
+  reader.readAsText(input.files[0]);
+};
 
-    drawChord( chordData, labelData )
-    initializeAreaChoice( labelData )
-    initializeBrush( chordData )
-  
-  })
+ 
+var start = function( processAdvancement )
+{
+
+d3.json( "ExistingKeywordsDictionnary.json" ).then( 
+  data => { 
+    render( data );
+    interaction( processAdvancement )
   }
+)
+}
 
-  initializeViz()
 
+var initializeViz = function( file ){
+
+  console.log( file )
+  
+  chordData = file.chordData
+  labelData = file.labelData
+
+  document.getElementById("cb_selfLink").checked = true;
+  document.getElementById("rb_lineaire").checked = true;
+
+  drawChord( chordData, labelData )
+  initializeAreaChoice( labelData )
+  initializeBrush( chordData )
+  
+}
