@@ -1,6 +1,3 @@
-
-var json = []
-
 var openFile = function(event) {
   var input = event.target;
 
@@ -8,29 +5,32 @@ var openFile = function(event) {
   reader.onload = function(){
     const dataURL = reader.result;
     json = JSON.parse( dataURL )
-    initializeViz(json)
+    updateViz(json)
     
   };
   reader.readAsText(input.files[0]);
 };
 
- 
-var start = function( processAdvancement )
-{
 
-d3.json( "ExistingKeywordsDictionnary.json" ).then( 
-  data => { 
-    render( data );
-    interaction( processAdvancement )
-  }
-)
+function initializeViz(){
+
+  Promise.all([ d3.json( "data.json" ), ]).then(function( file ) 
+  {
+    chordData = file[0].chordData
+    labelData = file[0].labelData
+
+    document.getElementById("cb_selfLink").checked = true;
+    document.getElementById("rb_lineaire").checked = true;
+  
+    drawChord( chordData, labelData )
+    initializeAreaChoice( labelData )
+    initializeBrush( chordData )
+  
+  })
 }
 
+var updateViz = function( file ){
 
-var initializeViz = function( file ){
-
-  console.log( file )
-  
   chordData = file.chordData
   labelData = file.labelData
 
@@ -39,6 +39,7 @@ var initializeViz = function( file ){
 
   drawChord( chordData, labelData )
   initializeAreaChoice( labelData )
-  initializeBrush( chordData )
   
 }
+
+initializeViz()
