@@ -172,10 +172,12 @@ let range = d3.brushSelection(this)
 
 d3.selectAll( ".ribbons" )
 .style( "opacity", 1)
+.style( "display", "inline")
 .filter( d=> 
   ( ( d.source.value < range[ 0 ] || d.source.value > range[ 1 ] ) &&
     ( d.target.value < range[ 0 ] || d.target.value > range[ 1 ] ) ) )
      .style( "opacity", 0 )
+     .style( "display", "none" )
 
 
 let txtUnits = ""
