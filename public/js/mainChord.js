@@ -85,7 +85,8 @@ function drawChord( chordData,  labelData)
   ribbons.enter().append( "path" )
                  .attr( "class", "ribbons" )
                  .style("fill", d =>  "url(#" + getGradID(d) + ")" )
-                 .on("mouseover", ribbon => visibleRibbonTooltip( ribbon ))
+                 .on("mouseover", ribbon => visibleRibbonTooltip( ribbon, 
+                                                                  labelData  ))
                  .on("mouseout", () => hideToolTip());
 
 

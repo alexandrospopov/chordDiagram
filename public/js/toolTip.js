@@ -1,23 +1,20 @@
-function visibleRibbonTooltip( ribbon ){
+function visibleRibbonTooltip( ribbon, labelData ){
 
-  // Promise.all([ d3.json( "data.json" ), ]).then(function( file ) 
-  // {
-    // chordData = file[0].chordData
-    // labelData = file[0].labelData
-  
+    console.log( labelData )
     let valuesStr = "Values : " + ribbon.source.value 
     if ( ribbon.source.value != ribbon.target.value ) {
-      valuesStr += " / " + ribbon.target.value
+      valuesStr += " -> " + ribbon.target.value
     } 
+
+    let linkStr  = "Link : " + labelData[ ribbon.source.index ] + 
+                   " -> " + labelData[ ribbon.target.index ]  
 
     d3.select('.tooltip').style("left", (d3.event.pageX + 5) + "px")
     .style("top", (d3.event.pageY - 28) + "px")
-    .html( "Links : " + getGradID( ribbon ) + "<br>"
-           + valuesStr )
+    .html( linkStr + "<br>" + valuesStr )
     .transition()
     .style("opacity", .9);
   
-  // })
 }
 
 function visibleCityTooltip( d, tooltip, tripList ){
