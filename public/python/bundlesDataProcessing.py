@@ -23,16 +23,20 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
       if subLabel not in nameLabels:
         nameLabels.append( subLabel )
 
+  labelsWoNum = [ label[ :-4 ] for label in labels ]
+  labelsSets = set( labelsWoNum )
+
   placeHolder = [ 0 for i in range( len( nameLabels ) ) ]
   labelCounter = [ list( placeHolder ) for i in range( len( nameLabels ) ) ]
 
-  for label in labels:
-    [ source,dest ] = label.split( "_" )[ : 2 ]
-    ( sourceIndex, destIndex ) = ( 
-                          nameLabels.index( source ), nameLabels.index( dest ) )
+  for labelSet in labelsSets:
+    
+    [ source,dest ] = labelSet.split( "_" )[ : 2 ]
+    ( sourceIndex, destIndex ) = ( nameLabels.index( source ), 
+                                   nameLabels.index( dest ) )
 
-    labelCounter[ sourceIndex ][ destIndex ] += 1
-    labelCounter[ destIndex ][ sourceIndex ] += 1
+    labelCounter[ sourceIndex ][ destIndex ] = labelsWoNum.count( labelSet )
+    labelCounter[ destIndex ][ sourceIndex ] = labelsWoNum.count( labelSet )
 
 
   dataClusters = {
