@@ -108,5 +108,5 @@ if __name__=="__main__":
 
   writeChordData( "data/listRoiLabels.json", 
                   "data/connectivity-matrix.mat",
-                  "data.json" )
+                  "dataConnectivityMatrix.json" )
 
