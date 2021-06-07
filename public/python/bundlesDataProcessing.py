@@ -13,7 +13,7 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
 
   bundlesJson = loadData( bundlesFileName )
 
-  fibreCounts = bundlesJson[ "curve3d_counts" ]
+  fibre = bundlesJson[ "curve3d_counts" ]
   labels = bundlesJson[ "labels" ]
 
   nameLabels = []
@@ -28,6 +28,7 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
 
   placeHolder = [ 0 for i in range( len( nameLabels ) ) ]
   labelCounter = [ list( placeHolder ) for i in range( len( nameLabels ) ) ]
+  fibreCounter = [ list( placeHolder ) for i in range( len( nameLabels ) ) ]
 
   for labelSet in labelsSets:
     
@@ -39,15 +40,37 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
     labelCounter[ destIndex ][ sourceIndex ] = labelsWoNum.count( labelSet )
 
 
+  for iLabel, nameLabel in enumerate( labels ): 
+
+    [ source,dest ] = nameLabel.split( "_" )[ : 2 ]
+
+    ( sourceIndex, destIndex ) = ( nameLabels.index( source ), 
+                                   nameLabels.index( dest ) )
+
+    fibreCounter[ sourceIndex ][ destIndex ] += fibre[ iLabel ]
+    fibreCounter[ destIndex ][ sourceIndex ] += fibre[ iLabel ]
+
   dataClusters = {
     "chordData" : labelCounter,
     "labelData" : nameLabels
   }
 
+  dataFibers = {
+    "chordData" : fibreCounter,
+    "labelData" : nameLabels
+  }
+
+  print( nameLabels )
+
+
   with open( clustersJson, 'w' ) as json_file:
     json.dump( dataClusters, json_file )
 
+  with open( fibersJson, 'w' ) as json_file:
+    json.dump( dataFibers, json_file )
+
   print( "\nWrote : %s \n" % clustersJson )
+  print( "\nWrote : %s \n" % fibersJson )
 
 
 if __name__=="__main__":
