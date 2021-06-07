@@ -39,6 +39,7 @@ var updateViz = function( file ){
 
   drawChord( chordData, labelData )
   initializeAreaChoice( labelData )
+  updateBrush( chordData )
 
   
 }
