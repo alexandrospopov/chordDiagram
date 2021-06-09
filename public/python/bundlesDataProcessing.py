@@ -34,21 +34,22 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
 
   nameRegions = getRegionNames( labels )
 
-  labelsWoNum = [ label[ :-4 ] for label in labels ]
-  labelsSets = set( labelsWoNum )
+  connectionNames = [ label[ :-4 ] for label in labels ]
 
   placeHolder = [ 0 for i in range( len( nameRegions ) ) ]
   labelCounter = [ list( placeHolder ) for i in range( len( nameRegions ) ) ]
   fibreCounter = [ list( placeHolder ) for i in range( len( nameRegions ) ) ]
 
-  for labelSet in labelsSets:
+  for connectionName in set( connectionNames ):
     
-    [ source,dest ] = labelSet.split( "_" )[ : 2 ]
-    ( sourceIndex, destIndex ) = ( nameRegions.index( source ), 
-                                   nameRegions.index( dest ) )
+    [ regionSource, regionDest ] = connectionName.split( "_" )[ : 2 ]
+    ( sourceIndex, destIndex ) = ( nameRegions.index( regionSource ), 
+                                   nameRegions.index( regionDest ) )
 
-    labelCounter[ sourceIndex ][ destIndex ] = labelsWoNum.count( labelSet )
-    labelCounter[ destIndex ][ sourceIndex ] = labelsWoNum.count( labelSet )
+    labelCounter[ sourceIndex ][ destIndex ] = connectionNames.count( 
+                                                                connectionName )
+    labelCounter[ destIndex ][ sourceIndex ] = connectionNames.count( 
+                                                                connectionName )
 
 
   for iLabel, nameLabel in enumerate( labels ): 
