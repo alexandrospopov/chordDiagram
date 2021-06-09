@@ -23,6 +23,24 @@ def getRegionNames( labels ):
   return nameRegions
 
 
+def countNumberBundlesPerConnection( nameRegions, connectionNames ):
+  
+  placeHolder = [ 0 for i in range( len( nameRegions ) ) ]
+  bundlesPerConnection = [ list( placeHolder ) for i in range( len( nameRegions ) ) ]
+
+  for connectionName in set( connectionNames ):
+    
+    [ regionSource, regionDest ] = connectionName.split( "_" )[ : 2 ]
+    ( sourceIndex, destIndex ) = ( nameRegions.index( regionSource ), 
+                                   nameRegions.index( regionDest ) )
+
+    bundlesPerConnection[ sourceIndex ][ destIndex ] = connectionNames.count( 
+                                                                connectionName )
+    bundlesPerConnection[ destIndex ][ sourceIndex ] = connectionNames.count( 
+                                                                connectionName )
+
+  return bundlesPerConnection
+
 def writeChordData( bundlesFileName, clustersJson, fibersJson ):
 
   print( "\nProcessing data in %s . \n" % bundlesFileName )
@@ -36,20 +54,12 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
 
   connectionNames = [ label[ :-4 ] for label in labels ]
 
+  bundlesPerConnection = countNumberBundlesPerConnection( nameRegions,
+                                                          connectionNames )
+
   placeHolder = [ 0 for i in range( len( nameRegions ) ) ]
-  labelCounter = [ list( placeHolder ) for i in range( len( nameRegions ) ) ]
   fibreCounter = [ list( placeHolder ) for i in range( len( nameRegions ) ) ]
 
-  for connectionName in set( connectionNames ):
-    
-    [ regionSource, regionDest ] = connectionName.split( "_" )[ : 2 ]
-    ( sourceIndex, destIndex ) = ( nameRegions.index( regionSource ), 
-                                   nameRegions.index( regionDest ) )
-
-    labelCounter[ sourceIndex ][ destIndex ] = connectionNames.count( 
-                                                                connectionName )
-    labelCounter[ destIndex ][ sourceIndex ] = connectionNames.count( 
-                                                                connectionName )
 
 
   for iLabel, nameLabel in enumerate( labels ): 
@@ -63,7 +73,7 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
     fibreCounter[ destIndex ][ sourceIndex ] += fibre[ iLabel ]
 
   dataClusters = {
-    "chordData" : labelCounter,
+    "chordData" : bundlesPerConnection,
     "labelData" : nameRegions
   }
 
