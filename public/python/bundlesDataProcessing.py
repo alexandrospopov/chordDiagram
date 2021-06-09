@@ -41,6 +41,19 @@ def countNumberBundlesPerConnection( nameRegions, connectionNames ):
 
   return bundlesPerConnection
 
+def writeBundlesPerConnection( bundlesPerConnection, 
+                               nameRegions,
+                               clustersJson ):
+
+  dataClusters = { "chordData" : bundlesPerConnection,
+                   "labelData" : nameRegions }
+
+  with open( clustersJson, 'w' ) as json_file:
+    json.dump( dataClusters, json_file )
+
+  print( "\nWrote : %s \n" % clustersJson )
+
+
 def countFibersPerConnection( nameRegions, labels, fibre ):
 
   placeHolder = [ 0 for i in range( len( nameRegions ) ) ]
@@ -58,6 +71,18 @@ def countFibersPerConnection( nameRegions, labels, fibre ):
 
   return fibreCounter
 
+def writeFibresPerConnection( fibresPerConnection, 
+                              nameRegions, 
+                              fibersJson ):
+
+  dataFibers = { "chordData" : fibresPerConnection,
+                 "labelData" : nameRegions }
+
+  with open( fibersJson, 'w' ) as json_file:
+    json.dump( dataFibers, json_file )
+
+  print( "\nWrote : %s \n" % fibersJson )
+
 def writeChordData( bundlesFileName, clustersJson, fibersJson ):
 
   print( "\nProcessing data in %s . \n" % bundlesFileName )
@@ -69,33 +94,20 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
 
   nameRegions = getRegionNames( labels )
 
-  connectionNames = [ label[ :-4 ] for label in labels ]
+  connectionNames = [ connectionName[ :-4 ] for connectionName in labels ]
 
   bundlesPerConnection = countNumberBundlesPerConnection( nameRegions,
                                                           connectionNames )
 
   fibresPerConnection = countFibersPerConnection( nameRegions, labels, fibre )
 
-  dataClusters = {
-    "chordData" : bundlesPerConnection,
-    "labelData" : nameRegions
-  }
+  writeBundlesPerConnection( bundlesPerConnection, 
+                             nameRegions,
+                             clustersJson )
 
-  dataFibers = {
-    "chordData" : fibresPerConnection,
-    "labelData" : nameRegions
-  }
-
-
-  with open( clustersJson, 'w' ) as json_file:
-    json.dump( dataClusters, json_file )
-
-  with open( fibersJson, 'w' ) as json_file:
-    json.dump( dataFibers, json_file )
-
-  print( "\nWrote : %s \n" % clustersJson )
-  print( "\nWrote : %s \n" % fibersJson )
-
+  writeFibresPerConnection( fibresPerConnection, 
+                            nameRegions, 
+                            fibersJson )
 
 if __name__=="__main__":
 
