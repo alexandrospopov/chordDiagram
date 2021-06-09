@@ -68,14 +68,14 @@ function drawChord( chordData,  labelData)
 
   arcLabel.enter()
           .append("text")
-          .attr("x", 2)
-          .attr("dy", -3)
-          .append("textPath")
+          .each( function(d) {d.angle = (d.startAngle + d.endAngle ) / 2 ;})
+          .attr("transform", function(d) {
+                      return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
+                      + "translate(" + (innerRadius + (d.angle > Math.PI ? 60 : 30)) + ")"
+                      + (d.angle > Math.PI ? "rotate(180)" : ""); })
           .text( (d, i) =>  labelData[ i ] ) 
-          .attr("xlink:href", (d, i) =>  "#arcPath" + i )
           .style("fill", "#35978f")
           .style('font-weight', 'bold');
-
 
   var ribbons = d3.select("#canvas").selectAll("path")
                                     .data( chords, getGradID )
