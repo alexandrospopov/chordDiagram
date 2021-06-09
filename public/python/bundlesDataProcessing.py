@@ -7,6 +7,22 @@ def loadData( bundlesFileName ):
 
   return bundlesJson
 
+def getRegionNames( labels ):
+  
+  nameRegions = []
+  
+  for nameConnection in labels:
+
+    regionsInConnection = nameConnection.split( "_" )
+
+    for region in regionsInConnection[ : 2 ]:
+
+      if region not in nameRegions:
+        nameRegions.append( region )
+
+  return nameRegions
+
+
 def writeChordData( bundlesFileName, clustersJson, fibersJson ):
 
   print( "\nProcessing data in %s . \n" % bundlesFileName )
@@ -16,25 +32,20 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
   fibre = bundlesJson[ "curve3d_counts" ]
   labels = bundlesJson[ "labels" ]
 
-  nameLabels = []
-  for label in labels:
-    subLabels = label.split( "_" )
-    for subLabel in subLabels[ : 2 ]:
-      if subLabel not in nameLabels:
-        nameLabels.append( subLabel )
+  nameRegions = getRegionNames( labels )
 
   labelsWoNum = [ label[ :-4 ] for label in labels ]
   labelsSets = set( labelsWoNum )
 
-  placeHolder = [ 0 for i in range( len( nameLabels ) ) ]
-  labelCounter = [ list( placeHolder ) for i in range( len( nameLabels ) ) ]
-  fibreCounter = [ list( placeHolder ) for i in range( len( nameLabels ) ) ]
+  placeHolder = [ 0 for i in range( len( nameRegions ) ) ]
+  labelCounter = [ list( placeHolder ) for i in range( len( nameRegions ) ) ]
+  fibreCounter = [ list( placeHolder ) for i in range( len( nameRegions ) ) ]
 
   for labelSet in labelsSets:
     
     [ source,dest ] = labelSet.split( "_" )[ : 2 ]
-    ( sourceIndex, destIndex ) = ( nameLabels.index( source ), 
-                                   nameLabels.index( dest ) )
+    ( sourceIndex, destIndex ) = ( nameRegions.index( source ), 
+                                   nameRegions.index( dest ) )
 
     labelCounter[ sourceIndex ][ destIndex ] = labelsWoNum.count( labelSet )
     labelCounter[ destIndex ][ sourceIndex ] = labelsWoNum.count( labelSet )
@@ -44,23 +55,21 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
 
     [ source,dest ] = nameLabel.split( "_" )[ : 2 ]
 
-    ( sourceIndex, destIndex ) = ( nameLabels.index( source ), 
-                                   nameLabels.index( dest ) )
+    ( sourceIndex, destIndex ) = ( nameRegions.index( source ), 
+                                   nameRegions.index( dest ) )
 
     fibreCounter[ sourceIndex ][ destIndex ] += fibre[ iLabel ]
     fibreCounter[ destIndex ][ sourceIndex ] += fibre[ iLabel ]
 
   dataClusters = {
     "chordData" : labelCounter,
-    "labelData" : nameLabels
+    "labelData" : nameRegions
   }
 
   dataFibers = {
     "chordData" : fibreCounter,
-    "labelData" : nameLabels
+    "labelData" : nameRegions
   }
-
-  print( nameLabels )
 
 
   with open( clustersJson, 'w' ) as json_file:
