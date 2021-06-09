@@ -41,6 +41,23 @@ def countNumberBundlesPerConnection( nameRegions, connectionNames ):
 
   return bundlesPerConnection
 
+def countFibersPerConnection( nameRegions, labels, fibre ):
+
+  placeHolder = [ 0 for i in range( len( nameRegions ) ) ]
+  fibreCounter = [ list( placeHolder ) for i in range( len( nameRegions ) ) ]
+
+  for iConnection, nameConnection in enumerate( labels ): 
+
+    [ regionSource, regionDest ] = nameConnection.split( "_" )[ : 2 ]
+
+    ( sourceIndex, destIndex ) = ( nameRegions.index( regionSource ), 
+                                   nameRegions.index( regionDest ) )
+
+    fibreCounter[ sourceIndex ][ destIndex ] += fibre[ iConnection ]
+    fibreCounter[ destIndex ][ sourceIndex ] += fibre[ iConnection ]
+
+  return fibreCounter
+
 def writeChordData( bundlesFileName, clustersJson, fibersJson ):
 
   print( "\nProcessing data in %s . \n" % bundlesFileName )
@@ -57,20 +74,7 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
   bundlesPerConnection = countNumberBundlesPerConnection( nameRegions,
                                                           connectionNames )
 
-  placeHolder = [ 0 for i in range( len( nameRegions ) ) ]
-  fibreCounter = [ list( placeHolder ) for i in range( len( nameRegions ) ) ]
-
-
-
-  for iLabel, nameLabel in enumerate( labels ): 
-
-    [ source,dest ] = nameLabel.split( "_" )[ : 2 ]
-
-    ( sourceIndex, destIndex ) = ( nameRegions.index( source ), 
-                                   nameRegions.index( dest ) )
-
-    fibreCounter[ sourceIndex ][ destIndex ] += fibre[ iLabel ]
-    fibreCounter[ destIndex ][ sourceIndex ] += fibre[ iLabel ]
+  fibresPerConnection = countFibersPerConnection( nameRegions, labels, fibre )
 
   dataClusters = {
     "chordData" : bundlesPerConnection,
@@ -78,7 +82,7 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
   }
 
   dataFibers = {
-    "chordData" : fibreCounter,
+    "chordData" : fibresPerConnection,
     "labelData" : nameRegions
   }
 
