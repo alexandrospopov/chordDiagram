@@ -68,14 +68,17 @@ function drawChord( chordData,  labelData)
 
   arcLabel.enter()
           .append("text")
-          .each( function(d) {d.angle = (d.startAngle + d.endAngle ) / 2 ;})
-          .attr("transform", function(d) {
-                      return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
-                      + "translate(" + (innerRadius + (d.angle > Math.PI ? 60 : 30)) + ")"
-                      + (d.angle > Math.PI ? "rotate(180)" : ""); })
-          .text( (d, i) =>  labelData[ i ] ) 
-          .style("fill", "#35978f")
-          .style('font-weight', 'bold');
+          .attr( "class","arcLabel" )
+
+  svg.selectAll( ".arcLabel" )
+     .each( function(d) {d.angle = (d.startAngle + d.endAngle ) / 2 ;})
+     .attr("transform", function(d) {
+          return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
+          + "translate(" + (innerRadius + (d.angle > Math.PI ? 60 : 30)) + ")"
+          + (d.angle > Math.PI ? "rotate(180)" : ""); })
+     .text( (d, i) =>  labelData[ i ] ) 
+     .style("fill", "#35978f")
+     .style('font-weight', 'bold');
 
   var ribbons = d3.select("#canvas").selectAll("path")
                                     .data( chords, getGradID )
