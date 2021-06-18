@@ -5,7 +5,7 @@ var openFile = function(event) {
   reader.onload = function(){
     const dataURL = reader.result;
     json = JSON.parse( dataURL )
-    updateViz(json)
+    updateViz( json )
     
   };
   reader.readAsText(input.files[0]);
@@ -16,30 +16,30 @@ function initializeViz(){
 
   Promise.all([ d3.json( fileToLoad ), ]).then(function( file ) 
   {
-    chordData = file[0].chordData
-    labelData = file[0].labelData
+    chordDataRaw = file[0].chordData;
+    labelDataRaw = file[0].labelData;
 
     document.getElementById("cb_selfLink").checked = true;
     document.getElementById("rb_lineaire").checked = true;
   
-    drawChord( chordData, labelData )
-    initializeAreaChoice( labelData )
-    initializeBrush( chordData )
+    drawChord( chordDataRaw, labelDataRaw )
+    initializeAreaChoice( labelDataRaw )
+    initializeBrush( chordDataRaw )
   
   })
 }
 
 var updateViz = function( file ){
 
-  chordData = file.chordData
-  labelData = file.labelData
+  chordDataRaw = file.chordData
+  labelDataRaw = file.labelData
 
   document.getElementById("cb_selfLink").checked = true;
   document.getElementById("rb_lineaire").checked = true;
 
-  drawChord( chordData, labelData )
-  initializeAreaChoice( labelData )
-  updateBrush( chordData )
+  drawChord( chordDataRaw, labelDataRaw )
+  initializeAreaChoice( labelDataRaw )
+  updateBrush( chordDataRaw )
 
   
 }

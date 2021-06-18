@@ -17,10 +17,8 @@ d3.select("#rb_relatif")
 
 
 function updateParametersViz(){
-  Promise.all([ d3.json( fileToLoad ), ]).then(function( file ) 
-{
-  chordData = file[0].chordData
-  labelData = file[0].labelData
+  chordData = JSON.parse( JSON.stringify( chordDataRaw ) );
+  labelData = JSON.parse( JSON.stringify( labelDataRaw ) );
 
 
   let showSelfLink = document.getElementById("cb_selfLink").checked 
@@ -73,7 +71,6 @@ function updateParametersViz(){
 
   drawChord( chordData, labelData )
   updateBrush( chordData )
-})
 }
 
 function cancelLabels( chordData, labelToCancel ){
