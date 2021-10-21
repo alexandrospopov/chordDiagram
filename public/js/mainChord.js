@@ -33,9 +33,9 @@ const canvas = svg.append("g")
 
 //color = d3.scaleOrdinal( d3.schemeBrBG[11] )
 //color = d3.scaleOrdinal(["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"])
-color = d3.scaleOrdinal( d3.Category10 )
+color = d3.scaleOrdinal(["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"])
 
-const defs = svg.append("defs")
+const defs = svg.append("defs") 
 
 
 function getGradID(d)
