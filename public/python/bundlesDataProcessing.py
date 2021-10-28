@@ -1,4 +1,6 @@
 import json
+import sys 
+import os
 
 def loadData( bundlesFileName ):
 
@@ -111,7 +113,14 @@ def writeChordData( bundlesFileName, clustersJson, fibersJson ):
 
 if __name__=="__main__":
 
-  writeChordData( "../archive/bundles/Paired.bundles",
-                  "../dataClusters.json",
-                  "../dataFibers.json" )
+  if( len( sys.argv ) < 4 ):
+    raise ValueError("Please specify the input .bundles, the output directory and the output prefix ")
+  
+  inputBundles = sys.argv[ 1 ]
+  outputDirectory = sys.argv[ 2 ]
+  outputPrefix = sys.argv[ 3 ]
+
+  writeChordData( inputBundles,
+                  os.path.join( outputDirectory, "%s-DataClusters.json" % outputPrefix ),
+                  os.path.join( outputDirectory, "%s-DataFibers.json" % outputPrefix ) )
 
